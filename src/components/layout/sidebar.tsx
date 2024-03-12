@@ -78,6 +78,34 @@ function Sidebar({ toggled, setToggled, setBroken }: SidebarProps) {
         >
           Dashboard
         </MenuItem>
+        <MenuItem
+          component={<NavLink to="/akun" />}
+          icon={<Home size={20} />}
+          active={location.pathname === "/akun"}
+        >
+          Akun
+        </MenuItem>
+        <MenuItem
+          component={<NavLink to="/prodi" />}
+          icon={<Home size={20} />}
+          active={location.pathname === "/prodi"}
+        >
+          Prodi
+        </MenuItem>
+        <MenuItem
+          component={<NavLink to="/mahasiswa" />}
+          icon={<Home size={20} />}
+          active={location.pathname === "/mahasiswa"}
+        >
+          Mahasiswa
+        </MenuItem>
+        <MenuItem
+          component={<NavLink to="/dosen" />}
+          icon={<Home size={20} />}
+          active={location.pathname === "/dosen"}
+        >
+          Dosen
+        </MenuItem>
         <MenuItem icon={<Power />} onClick={() => logoutMutation.mutate()}>
           Logout
         </MenuItem>
