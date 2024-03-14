@@ -6,7 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { PlusSquare } from "lucide-react";
 
-import ServiceProdi from "~/actions/prodi";
+import ServiceMatakuliah from "~/actions/matakuliah";
 import {
   Dialog,
   DialogContent,
@@ -25,40 +25,38 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 
-import { Prodi, prodiSchema } from "~/schema";
+import { Matakuliah, matakuliahSchema } from "~/schema";
 
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 
-function AddProdi() {
+function AddMatakuliah() {
   const queryClient = useQueryClient();
 
   const [openDialog, setOpenDialog] = useState(false);
-  const form = useForm<z.infer<typeof prodiSchema>>({
-    resolver: zodResolver(prodiSchema),
+  const form = useForm<z.infer<typeof matakuliahSchema>>({
+    resolver: zodResolver(matakuliahSchema),
     defaultValues: {
       kode: "",
       nama: "",
     },
-    mode: "onChange",
   });
 
-  const prodiMutation = useMutation({
-    mutationKey: ["add-prodi"],
-    mutationFn: ServiceProdi.create,
+  const matakuliahMutation = useMutation({
+    mutationKey: ["add-matakuliah"],
+    mutationFn: ServiceMatakuliah.create,
     onSuccess: (payload) => {
-      toast.success(`Prodi ${payload.nama} berhasil ditambahkan`);
+      toast.success(`Matakuliah ${payload.nama} berhasil ditambahkan`);
       setOpenDialog(false);
-      queryClient.invalidateQueries({ queryKey: ["prodi"] });
+      queryClient.invalidateQueries({ queryKey: ["matakuliah"] });
     },
     onError: () => {
-      toast.error("Prodi gagal ditambahkan");
+      toast.error("Matakuliah gagal ditambahkan");
     },
   });
 
-  function onSubmit(values: Prodi) {
-    prodiMutation.mutate(values);
-    // console.log(values);
+  function onSubmit(values: Matakuliah) {
+    matakuliahMutation.mutate(values);
   }
   return (
     <Dialog
@@ -74,12 +72,12 @@ function AddProdi() {
           size="lg"
           className="text-lg mt-4 float-right"
         >
-          <PlusSquare className="w-6 h-6 me-4" /> Tambah Prodi
+          <PlusSquare className="w-6 h-6 me-4" /> Tambah Matakuliah
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Tambah Program Studi</DialogTitle>
+          <DialogTitle>Tambah Matakuliah</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
@@ -88,7 +86,7 @@ function AddProdi() {
               name="kode"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Kode Prodi</FormLabel>
+                  <FormLabel>Kode</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="kode"
@@ -107,7 +105,7 @@ function AddProdi() {
               name="nama"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nama Program Studi</FormLabel>
+                  <FormLabel>Nama</FormLabel>
                   <FormControl>
                     <Input placeholder="nama" {...field} />
                   </FormControl>
@@ -116,8 +114,8 @@ function AddProdi() {
               )}
             />
             <DialogFooter>
-              <Button type="submit" disabled={prodiMutation.isPending}>
-                {prodiMutation.isPending ? "Menyimpan" : "Simpan"}
+              <Button type="submit" disabled={matakuliahMutation.isPending}>
+                {matakuliahMutation.isPending ? "Menyimpan" : "Simpan"}
               </Button>
             </DialogFooter>
           </form>
@@ -127,4 +125,4 @@ function AddProdi() {
   );
 }
 
-export default AddProdi;
+export default AddMatakuliah;

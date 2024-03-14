@@ -1,19 +1,17 @@
-import { createContext, useState} from "react";
-import { User } from "~/schema";
-
-
+import { createContext, useState } from "react";
+import { AkunSafe } from "~/schema";
 
 export const AuthContext = createContext<AuthContextType>({
-  user: {
-    id: "",
+  akun: {
     role: "mahasiswa",
     username: "",
+    isActive: false
   },
   setUser: () => {},
 });
 export type AuthContextType = {
-  user: User;
-  setUser: React.Dispatch<React.SetStateAction<User>>;
+  akun: AkunSafe;
+  setUser: React.Dispatch<React.SetStateAction<AkunSafe>>;
 };
 
 export default function AuthProvider({
@@ -21,13 +19,13 @@ export default function AuthProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [user, setUser] = useState<User>({
-    id: "",
+  const [akun, setUser] = useState<AkunSafe>({
     role: "mahasiswa",
     username: "",
+    isActive: false,
   });
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={{ akun, setUser }}>
       {children}
     </AuthContext.Provider>
   );

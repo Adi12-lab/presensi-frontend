@@ -10,16 +10,16 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import { Mahasiswa as MahasiswaType } from "~/schema";
+import { Dosen as DosenType } from "~/schema";
 
-import ServiceMahasiswa from "~/actions/mahasiswa";
+import ServiceDosen from "~/actions/dosen";
 import Wrapper from "~/components/layout/wrapper";
 import { Anchor } from "~/components/ui/anchor";
 
-function Mahasiswa() {
-  const { data } = useQuery<MahasiswaType[]>({
-    queryKey: ["mahasiswa"],
-    queryFn: ServiceMahasiswa.all,
+function Dosen() {
+  const { data } = useQuery<DosenType[]>({
+    queryKey: ["dosen"],
+    queryFn: ServiceDosen.all,
     staleTime: 1000 * 60 * 5,
   });
 
@@ -27,38 +27,38 @@ function Mahasiswa() {
     data && (
       <Wrapper>
         <div>
-          <h1 className="font-bold text-xl">Daftar Mahasiswa PSDKU Lumajang</h1>
+          <h1 className="font-bold text-xl">Daftar Dosen PSDKU Lumajang</h1>
         </div>
 
         <Anchor
           variant={"secondary"}
           size="lg"
-          href="/mahasiswa/add"
+          href="/dosen/add"
           className="text-lg mt-4 float-right"
         >
-          <PlusSquare className="w-6 h-6 me-4" /> Tambah Mahasiswa
+          <PlusSquare className="w-6 h-6 me-4" /> Tambah Dosen
         </Anchor>
         <Table className="mt-10">
-          <TableCaption>Daftar Mahasiswa</TableCaption>
+          <TableCaption>Daftar Dosen</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead>Nim</TableHead>
+              <TableHead>NIDN</TableHead>
               <TableHead>Nama</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Aksi</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.map((mahasiswa) => (
-              <TableRow key={mahasiswa.nim}>
-                <TableCell>{mahasiswa.nim}</TableCell>
-                <TableCell>{mahasiswa.nama}</TableCell>
-                <TableCell>{mahasiswa.email}</TableCell>
+            {data.map((dosen) => (
+              <TableRow key={dosen.nidn}>
+                <TableCell>{dosen.nidn}</TableCell>
+                <TableCell>{dosen.nama}</TableCell>
+                <TableCell>{dosen.email}</TableCell>
                 <TableCell className="space-x-4">
                   <Anchor
                     variant={"warning"}
                     size="icon"
-                    href={`/mahasiswa/${mahasiswa.nim}/edit`}
+                    href={`/dosen/${dosen.nidn}/edit`}
                   >
                     <Pencil />
                   </Anchor>
@@ -75,4 +75,4 @@ function Mahasiswa() {
   );
 }
 
-export default Mahasiswa;
+export default Dosen;

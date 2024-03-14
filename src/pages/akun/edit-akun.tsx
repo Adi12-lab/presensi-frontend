@@ -32,7 +32,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 
-import { Akun, AkunWithPassword, akunSchema } from "~/schema";
+import { Akun, akunSchemaEdit, AkunEdit } from "~/schema";
 
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -47,11 +47,10 @@ function EditAkun({
 }: ModalProps<EditDeleteOperation, Akun>) {
   const queryClient = useQueryClient();
 
-  const form = useForm<z.infer<typeof akunSchema>>({
-    resolver: zodResolver(akunSchema),
+  const form = useForm<z.infer<typeof akunSchemaEdit>>({
+    resolver: zodResolver(akunSchemaEdit),
     defaultValues: {
       username: "",
-      password: "",
       role: "mahasiswa",
     },
   });
@@ -66,7 +65,7 @@ function EditAkun({
 
   const editAkunMutation = useMutation({
     mutationKey: ["edit-akun"],
-    mutationFn: async (payload: AkunWithPassword) => {
+    mutationFn: async (payload: AkunEdit) => {
       return await ServiceAkun.update(data.username, payload);
     },
     onSuccess: (payload: Akun) => {
@@ -75,11 +74,11 @@ function EditAkun({
       queryClient.invalidateQueries({ queryKey: ["akun"] });
     },
     onError: () => {
-      toast.error("Akun gagal ditambahkan");
+      toast.error("Akun gagal diedit");
     },
   });
 
-  function onSubmit(values: AkunWithPassword) {
+  function onSubmit(values: AkunEdit) {
     editAkunMutation.mutate(values);
     // console.log(values);
   }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { Trash2, Pencil } from "lucide-react";
+import { Trash2, Pencil, SquareUser } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
 import {
@@ -13,6 +13,7 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { Button } from "~/components/ui/button";
+import { Anchor } from "~/components/ui/anchor";
 import { Kelas as KelasType } from "~/schema";
 
 import { EditDeleteOperation } from "~/type";
@@ -69,6 +70,13 @@ function Kelas() {
                 <TableCell>{kelas.nama}</TableCell>
                 <TableCell>{kelas.angkatan}</TableCell>
                 <TableCell className="space-x-3">
+                  <Anchor
+                    variant="outline"
+                    size={"icon"}
+                    href={`/kelas/${kelas.kode}`}
+                  >
+                    <SquareUser />
+                  </Anchor>
                   <Button
                     variant={"warning"}
                     size={"icon"}

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Trash2, Pencil } from "lucide-react";
+import { Trash2, Pencil, Network } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
 import { EditDeleteOperation } from "~/type";
@@ -13,64 +13,57 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { Button } from "~/components/ui/button";
-import { Akun as AkunType } from "~/schema";
+import { Matakuliah as MatakuliahType } from "~/schema";
 
-import ServiceAkun from "~/actions/akun";
-import AddAkun from "./add-akun";
-import DeleteAkun from "./delete-akun";
-import EditAkun from "./edit-akun";
+import ServiceMatakuliah from "~/actions/matakuliah";
+import AddMatakuliah from "./add-matakuliah";
+import DeleteMatakuliah from "./delete-matakuliah";
+import EditProdi from "./edit-matakuliah";
 import Wrapper from "~/components/layout/wrapper";
-import { Badge } from "~/components/ui/badge";
+import { Anchor } from "~/components/ui/anchor";
 
 type DataModal = {
-  data?: AkunType;
+  data?: MatakuliahType;
   editDeleteOperation: EditDeleteOperation;
 };
 
-function Prodi() {
+function Matakuliah() {
   const [openModal, setOpenModal] = useState(false);
   const [dataModal, setDataModal] = useState<DataModal>({
     editDeleteOperation: "delete",
   });
   const { data } = useQuery({
-    queryKey: ["akun"],
-    queryFn: async () => {
-      return await ServiceAkun.all();
-    },
+    queryKey: ["matakuliah"],
+    queryFn: ServiceMatakuliah.all,
     staleTime: 1000 * 60 * 5,
   });
 
   return (
     <Wrapper>
       <div>
-        <h1 className="font-bold text-xl">Daftar Akun</h1>
+        <h1 className="font-bold text-xl">Daftar Matakuliah</h1>
       </div>
 
-      <AddAkun />
+      <AddMatakuliah />
       <Table className="mt-10">
         <TableCaption>Daftar Prodi</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>Username</TableHead>
-            <TableHead>Role</TableHead>
-            <TableHead>Aktif</TableHead>
+            <TableHead>Kode</TableHead>
+            <TableHead>Nama</TableHead>
             <TableHead>Aksi</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {data &&
-            data.map((akun: AkunType) => (
-              <TableRow key={akun.username}>
-                <TableCell>{akun.username}</TableCell>
-                <TableCell>{akun.role}</TableCell>
-                <TableCell>
-                  {
-                    <Badge variant={"default"}>
-                      {akun.isActive ? "aktif" : "nonaktif"}
-                    </Badge>
-                  }
-                </TableCell>
+            data.map((matakuliah: MatakuliahType) => (
+              <TableRow key={matakuliah.kode}>
+                <TableCell>{matakuliah.kode}</TableCell>
+                <TableCell>{matakuliah.nama}</TableCell>
                 <TableCell className="space-x-4">
+                  <Anchor variant={'outline'} size={'icon'} href={`matakuliah/${matakuliah.kode}/kelas`}>
+                    <Network />
+                  </Anchor>
                   <Button
                     variant={"warning"}
                     size="icon"
@@ -78,7 +71,7 @@ function Prodi() {
                       setOpenModal(true);
                       setDataModal({
                         editDeleteOperation: "edit",
-                        data: akun,
+                        data: matakuliah,
                       });
                     }}
                   >
@@ -91,7 +84,7 @@ function Prodi() {
                       setOpenModal(true);
                       setDataModal({
                         editDeleteOperation: "delete",
-                        data: akun,
+                        data: matakuliah,
                       });
                     }}
                   >
@@ -103,15 +96,15 @@ function Prodi() {
         </TableBody>
       </Table>
 
-      <EditAkun
-        data={dataModal.data as AkunType}
+      <EditProdi
+        data={dataModal.data as MatakuliahType}
         isOpen={openModal}
         setIsOpen={setOpenModal}
         operation={dataModal.editDeleteOperation}
       />
 
-      <DeleteAkun
-        data={dataModal.data as AkunType}
+      <DeleteMatakuliah
+        data={dataModal.data as MatakuliahType}
         isOpen={openModal}
         setIsOpen={setOpenModal}
         operation={dataModal.editDeleteOperation}
@@ -120,4 +113,4 @@ function Prodi() {
   );
 }
 
-export default Prodi;
+export default Matakuliah;

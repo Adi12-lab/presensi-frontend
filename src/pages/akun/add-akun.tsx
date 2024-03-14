@@ -33,7 +33,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 
-import { Akun, AkunWithPassword, akunSchema } from "~/schema";
+import { Akun, akunSchema } from "~/schema";
 
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -66,7 +66,7 @@ function AddAkun() {
     },
   });
 
-  function onSubmit(values: AkunWithPassword) {
+  function onSubmit(values: Akun) {
     pesertaMutation.mutate(values);
     // console.log(values);
   }

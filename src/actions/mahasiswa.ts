@@ -1,19 +1,22 @@
 import { axiosInstance } from "~/lib/utils";
-import { Prodi } from "~/schema";
-class ServiceProdi {
-  async create(payload: Prodi) {
-    return axiosInstance.post("/prodi", payload).then((data) => data.data);
+import { Mahasiswa } from "~/schema";
+class ServiceMahasiswa {
+  async create(payload: Mahasiswa) {
+    return axiosInstance.post("/mahasiswa", payload).then((data) => data.data);
   }
   async all() {
-    return axiosInstance.get(`/prodi`).then((data) => data.data);
+    return axiosInstance.get(`/mahasiswa`).then((data) => data.data);
   }
-  async update(kode: string, payload: Prodi) {
+  async find(nim: string) {
+    return axiosInstance.get(`/mahasiswa/${nim}`).then((data) => data.data);
+  }
+  async update(nim: string, payload: Mahasiswa) {
     return axiosInstance
-      .put(`/prodi/${kode}`, payload)
+      .put(`/mahasiswa/${nim}`, payload)
       .then((data) => data.data);
   }
-  async delete(kode: string) {
-    return axiosInstance.delete(`/prodi/${kode}`).then((data) => data.data);
+  async delete(nim: string) {
+    return axiosInstance.delete(`/prodi/${nim}`).then((data) => data.data);
   }
 }
-export default new ServiceProdi();
+export default new ServiceMahasiswa();
