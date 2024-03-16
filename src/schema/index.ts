@@ -97,4 +97,8 @@ export type PembelajaranComplete = Pembelajaran & {
   matakuliah: Matakuliah;
   dosen: Dosen;
 };
-// export const
+
+export const anggotaKelasSchema = mahasiswaSchema
+  .pick({ nim: true })
+
+export type AnggotaKelas = z.infer<typeof anggotaKelasSchema>;

@@ -4,8 +4,8 @@ class ServiceMahasiswa {
   async create(payload: Mahasiswa) {
     return axiosInstance.post("/mahasiswa", payload).then((data) => data.data);
   }
-  async all() {
-    return axiosInstance.get(`/mahasiswa`).then((data) => data.data);
+  async all(query?: string) {
+    return axiosInstance.get(`/mahasiswa/?${query}`).then((data) => data.data);
   }
   async find(nim: string) {
     return axiosInstance.get(`/mahasiswa/${nim}`).then((data) => data.data);

@@ -1,5 +1,5 @@
 import { axiosInstance } from "~/lib/utils";
-import { NewKelas } from "~/schema";
+import { AnggotaKelas, NewKelas } from "~/schema";
 class ServiceKelas {
   async create(payload: NewKelas) {
     return axiosInstance.post("/kelas", payload).then((data) => data.data);
@@ -13,6 +13,16 @@ class ServiceKelas {
   async update(kode: string, payload: NewKelas) {
     return axiosInstance
       .put(`/kelas/${kode}`, payload)
+      .then((data) => data.data);
+  }
+  async tambahAnggota(kelasKode: string, payload: AnggotaKelas) {
+    return axiosInstance
+      .post(`/kelas/${kelasKode}/anggota`, payload)
+      .then((data) => data.data);
+  }
+  async deleteAnggota(kelasKode: string, payload: AnggotaKelas) {
+    return axiosInstance
+      .post(`/kelas/${kelasKode}/anggota`, payload)
       .then((data) => data.data);
   }
   async delete(kode: string) {
