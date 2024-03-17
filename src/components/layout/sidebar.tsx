@@ -38,12 +38,12 @@ function Sidebar({ toggled, setToggled, setBroken }: SidebarProps) {
 
   const navlinks: NavLinksType[] = [
     { link: "/dashboard", label: "Dashboard", role: ["admin", "dosen"] },
-    { link: "/akun", label: "Akun", role: ["admin"] },
-    { link: "/dosen", label: "Dosen", role: ["admin"] },
-    { link: "/mahasiswa", label: "Mahasiswa", role: ["admin"] },
-    { link: "/prodi", label: "Program Studi", role: ["admin"] },
-    { link: "/matakuliah", label: "Matakuliah", role: ["admin"] },
-    { link: "/pertemuan", label: "Pertemuan", role: ["dosen"] },
+    { link: "/admin/akun", label: "Akun", role: ["admin"] },
+    { link: "/admin/dosen", label: "Dosen", role: ["admin"] },
+    { link: "/admin/mahasiswa", label: "Mahasiswa", role: ["admin"] },
+    { link: "/admin/prodi", label: "Program Studi", role: ["admin"] },
+    { link: "/admin/matakuliah", label: "Matakuliah", role: ["admin"] },
+    { link: "/dosen/matakuliah", label: "Matakuliah", role: ["dosen"] },
   ];
 
   return (

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -22,6 +22,7 @@ import { PembelajaranComplete } from "~/schema";
 import { EditDeleteOperation } from "~/type";
 
 import DeletePembelajaran from "./delete-pembelajaran";
+import { KelasContext } from "../detail-kelas";
 
 export type DataModal = {
   data?: PembelajaranComplete;
@@ -29,13 +30,17 @@ export type DataModal = {
 };
 
 function Pembelajaran() {
+  const kelasKode = useContext(KelasContext);
   const [openModal, setOpenModal] = useState(false);
   const [dataModal, setDataModal] = useState<DataModal>({
     editDeleteOperation: "delete",
   });
   const { data } = useQuery<PembelajaranComplete[]>({
     queryKey: ["pembelajaran"],
-    queryFn: ServicePembelajaran.all,
+    queryFn: async () => {
+      return await ServicePembelajaran.all(kelasKode as string);
+    },
+    enabled: !!kelasKode,
   });
 
   const table = useReactTable({

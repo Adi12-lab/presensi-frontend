@@ -4,8 +4,14 @@ class ServiceAkun {
   async create(payload: Akun) {
     return axiosInstance.post("/akun", payload).then((data) => data.data);
   }
-  async all(query?: string ) {
-    return axiosInstance.get(`/akun?${query}`).then((data) => data.data);
+  async all() {
+    return axiosInstance.get(`/akun`).then((data) => data.data);
+  }
+  async mahasiswa() {
+    return axiosInstance.get("/akun/mahasiswa").then((data) => data.data);
+  }
+  async dosen() {
+    return axiosInstance.get('/akun/dosen').then(data => data.data)
   }
   async update(username: string, payload: AkunEdit) {
     return axiosInstance

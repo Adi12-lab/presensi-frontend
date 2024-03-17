@@ -19,7 +19,9 @@ import { Anchor } from "~/components/ui/anchor";
 function Mahasiswa() {
   const { data } = useQuery<MahasiswaType[]>({
     queryKey: ["mahasiswa"],
-    queryFn: ServiceMahasiswa.all,
+    queryFn: async () => {
+      return await ServiceMahasiswa.all();
+    },
     staleTime: 1000 * 60 * 5,
   });
 

@@ -4,21 +4,12 @@ import ProtectedRoute from "./components/layout/protected-route";
 
 const Login = lazy(() => import("./pages/login"));
 const Dashboard = lazy(() => import("./pages/dashboard"));
+import RouteForAdmin from "./routes/admin";
+import RouteForDosen from "./routes/dosen";
 
 //Admin
-const Prodi = lazy(() => import("./pages/prodi/prodi"));
-const Matakuliah = lazy(() => import("./pages/matakuliah/matakuliah"));
-const Akun = lazy(() => import("./pages/akun/akun"));
-const AddMahasiswa = lazy(() => import("./pages/mahasiswa/add-mahasiswa"));
-const EditMahasiswa = lazy(() => import("./pages/mahasiswa/edit-mahasiswa"));
-const Mahasiswa = lazy(() => import("./pages/mahasiswa/mahasiswa"));
 
-const Dosen = lazy(() => import("./pages/dosen/dosen"));
-const AddDosen = lazy(() => import("./pages/dosen/add-dosen"));
-
-//Admin dan Dosen
-const Kelas = lazy(() => import("./pages/kelas/kelas"));
-const DetailKelas = lazy(() => import("./pages/kelas/detail/detail-kelas"));
+//Dosen
 
 function App() {
   return (
@@ -30,23 +21,12 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
           </Route>
 
-          <Route element={<ProtectedRoute roles={["admin"]} />}>
-            <Route path="/akun" element={<Akun />} />
-            <Route path="/matakuliah" element={<Matakuliah />} />
-            <Route path="/prodi" element={<Prodi />} />
-            <Route path="/prodi/:prodi/kelas" element={<Kelas />} />
+          <Route path="/admin" element={<ProtectedRoute roles={["admin"]} />}>
+            {RouteForAdmin()}
+          </Route>
 
-            <Route path="/mahasiswa">
-              <Route path="" element={<Mahasiswa />} />
-              <Route path="add" element={<AddMahasiswa />} />
-              <Route path=":nim/edit" element={<EditMahasiswa />} />
-            </Route>
-
-            <Route path="/kelas/:kode" element={<DetailKelas />} />
-            <Route path="/dosen">
-              <Route path="" element={<Dosen />} />
-              <Route path="add" element={<AddDosen />} />
-            </Route>
+          <Route path="/dosen" element={<ProtectedRoute roles={["dosen"]} />}>
+            {RouteForDosen()}
           </Route>
         </Routes>
       </Suspense>

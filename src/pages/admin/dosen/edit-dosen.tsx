@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+
+import { useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,10 +9,10 @@ import toast from "react-hot-toast";
 import { ChevronsUpDown, Check, Loader2 } from "lucide-react";
 import { cn } from "~/lib/utils";
 
-import ServiceMahasiswa from "~/actions/mahasiswa";
+import ServiceDosen from "~/actions/dosen";
 import ServiceAkun from "~/actions/akun";
 
-import { Akun, mahasiswaSchema, Mahasiswa } from "~/schema";
+import { Akun, Dosen, dosenSchema } from "~/schema";
 
 import Wrapper from "~/components/layout/wrapper";
 import { Input } from "~/components/ui/input";
@@ -45,14 +47,13 @@ import {
   CommandInput,
   CommandItem,
 } from "~/components/ui/command";
-import { useParams } from "react-router-dom";
 
-function EditMahasiswa() {
-  const { nim } = useParams();
-  const form = useForm<z.infer<typeof mahasiswaSchema>>({
-    resolver: zodResolver(mahasiswaSchema),
+function EditDosen() {
+  const { nidn } = useParams();
+  const form = useForm<z.infer<typeof dosenSchema>>({
+    resolver: zodResolver(dosenSchema),
     defaultValues: {
-      nim: "",
+      nidn: "",
       nama: "",
       akunUsername: "",
       email: "",
@@ -61,17 +62,22 @@ function EditMahasiswa() {
     mode: "onChange",
   });
 
-  const { data } = useQuery<Mahasiswa>({
-    queryKey: ["mahasiswa"],
-    queryFn: async () => {
-      return await ServiceMahasiswa.find(nim as string);
-    },
-    enabled: nim !== undefined,
+  const akuns = useQuery<Akun[]>({
+    queryKey: ["akun"],
+    queryFn: ServiceAkun.dosen,
+    staleTime: 1000 * 60 * 5,
   });
 
+  const { data } = useQuery<Dosen>({
+    queryKey: ["dosen"],
+    queryFn: async () => {
+      return await ServiceDosen.find(nidn as string);
+    },
+    enabled: nidn !== undefined,
+  });
   useEffect(() => {
     if (data) {
-      form.setValue("nim", data.nim);
+      form.setValue("nidn", data.nidn);
       form.setValue("nama", data.nama);
       form.setValue("akunUsername", data.akunUsername);
       form.setValue("email", data.email);
@@ -79,50 +85,44 @@ function EditMahasiswa() {
     }
   }, [data, form]);
 
-  const mahasiswaMutation = useMutation({
-    mutationKey: ["update-mahasiswa"],
-    mutationFn: async (paylod: Mahasiswa) => {
-      return await ServiceMahasiswa.update(nim as string, paylod);
+  const dosenMutation = useMutation({
+    mutationKey: ["add-mahasiswa"],
+    mutationFn: async (paylod: Dosen) => {
+      return await ServiceDosen.update(nidn as string, paylod);
     },
     onSuccess: () => {
-      window.location.href = "/mahasiswa";
+      window.location.href = "/dosen";
     },
     onError: () => {
-      toast.error("Mahasiswa gagal ditambahkan");
+      toast.error("Dosen gagal diupdate");
     },
   });
 
-  const akuns = useQuery<Akun[]>({
-    queryKey: ["akun"],
-    queryFn: ServiceAkun.all,
-    staleTime: 1000 * 60 * 5,
-  });
-
-  function onSubmit(values: Mahasiswa) {
-    mahasiswaMutation.mutate(values);
+  function onSubmit(values: Dosen) {
+    dosenMutation.mutate(values);
     // console.log(values);
   }
 
   return (
     <Wrapper>
       <div>
-        <h1>Tambah Mahasiswa</h1>
+        <h1>Tambah Edit</h1>
       </div>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
           <FormField
             control={form.control}
-            name="nim"
+            name="nidn"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Nim Mahasiswa</FormLabel>
+                <FormLabel>No NIDN</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="NIM"
+                    placeholder="NIDN"
                     className="w-[300px]"
                     {...field}
-                    disabled={mahasiswaMutation.isPending}
+                    disabled={dosenMutation.isPending}
                   />
                 </FormControl>
                 <FormMessage />
@@ -139,7 +139,7 @@ function EditMahasiswa() {
                   <Input
                     placeholder="Nama"
                     {...field}
-                    disabled={mahasiswaMutation.isPending}
+                    disabled={dosenMutation.isPending}
                   />
                 </FormControl>
                 <FormMessage />
@@ -156,7 +156,7 @@ function EditMahasiswa() {
                   <Input
                     placeholder="email"
                     {...field}
-                    disabled={mahasiswaMutation.isPending}
+                    disabled={dosenMutation.isPending}
                   />
                 </FormControl>
                 <FormMessage />
@@ -169,11 +169,11 @@ function EditMahasiswa() {
             name="kelamin"
             render={({ field }) => (
               <FormItem className="w-[200px]">
-                <FormLabel>Jenis Kelamin</FormLabel>
+                <FormLabel>Gender</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   value={field.value}
-                  disabled={mahasiswaMutation.isPending}
+                  disabled={dosenMutation.isPending}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -197,10 +197,7 @@ function EditMahasiswa() {
               <FormItem className="flex flex-col">
                 <FormLabel>Akun Username</FormLabel>
                 <Popover>
-                  <PopoverTrigger
-                    asChild
-                    disabled={mahasiswaMutation.isPending}
-                  >
+                  <PopoverTrigger asChild disabled={dosenMutation.isPending}>
                     <FormControl>
                       <Button
                         variant="outline"
@@ -254,16 +251,16 @@ function EditMahasiswa() {
 
           <Button
             variant={"default"}
-            disabled={mahasiswaMutation.isPending}
+            disabled={dosenMutation.isPending}
             type="submit"
           >
-            {mahasiswaMutation.isPending ? (
+            {dosenMutation.isPending ? (
               <React.Fragment>
                 <Loader2 />
-                Mengupdate
+                Menyimpan
               </React.Fragment>
             ) : (
-              "Update"
+              "Simpan"
             )}
           </Button>
         </form>
@@ -272,4 +269,4 @@ function EditMahasiswa() {
   );
 }
 
-export default EditMahasiswa;
+export default EditDosen;

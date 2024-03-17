@@ -7,13 +7,20 @@ class ServiceMatakuliah {
   async all() {
     return axiosInstance.get(`/matakuliah`).then((data) => data.data);
   }
+  async findByDosen(kode: string) {
+    return axiosInstance
+      .get(`/matakuliah/${kode}/kelas`)
+      .then((data) => data.data);
+  }
   async update(kode: string, payload: Matakuliah) {
     return axiosInstance
       .put(`/matakuliah/${kode}`, payload)
       .then((data) => data.data);
   }
   async delete(kode: string) {
-    return axiosInstance.delete(`/matakuliah/${kode}`).then((data) => data.data);
+    return axiosInstance
+      .delete(`/matakuliah/${kode}`)
+      .then((data) => data.data);
   }
 }
 export default new ServiceMatakuliah();

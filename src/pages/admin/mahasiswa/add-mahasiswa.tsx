@@ -65,7 +65,7 @@ function AddMahasiswa() {
     mutationKey: ["add-mahasiswa"],
     mutationFn: ServiceMahasiswa.create,
     onSuccess: () => {
-      navigate("/mahasiswa");
+      navigate("/admin/mahasiswa");
     },
     onError: () => {
       toast.error("Mahasiswa gagal ditambahkan");
@@ -74,8 +74,8 @@ function AddMahasiswa() {
 
   const akuns = useQuery<Akun[]>({
     queryKey: ["akun"],
-    queryFn: async ()=> {
-      return await ServiceAkun.all('mahasiswa=true')
+    queryFn: async () => {
+      return await ServiceAkun.mahasiswa();
     },
     staleTime: 1000 * 60 * 5,
   });
