@@ -15,6 +15,11 @@ class ServiceKelas {
       .put(`/kelas/${kode}`, payload)
       .then((data) => data.data);
   }
+  async findAnggota(kelasKode: string) {
+    return axiosInstance
+      .get(`/kelas/${kelasKode}/anggota`)
+      .then((data) => data.data);
+  }
   async tambahAnggota(kelasKode: string, payload: AnggotaKelas) {
     return axiosInstance
       .post(`/kelas/${kelasKode}/anggota`, payload)

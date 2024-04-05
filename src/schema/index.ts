@@ -96,9 +96,21 @@ export type Pembelajaran = NewPembelajaran & { id: number };
 export type PembelajaranComplete = Pembelajaran & {
   matakuliah: Matakuliah;
   dosen: Dosen;
+  kelas: Kelas;
 };
 
-export const anggotaKelasSchema = mahasiswaSchema
-  .pick({ nim: true })
+export const anggotaKelasSchema = mahasiswaSchema.pick({ nim: true });
 
 export type AnggotaKelas = z.infer<typeof anggotaKelasSchema>;
+
+export const pertemuanSchema = z.object({
+  pertemuanKe: z.number({ required_error: "Pertemuan ke berapa" }),
+  judulMateri: z.string().min(2, { message: "Judul Pertemuan harus ada" }),
+  deskripsiMateri: z.string().min(2, { message: "Deskripsi materi harus ada" }),
+  timerPresensi: z.number({ required_error: "timer harus ada" }),
+  tanggal: z.date(),
+  pembelajaranId: z.number().min(1, { message: "Pembelajaran harus ada" }),
+});
+
+export type NewPertemuan = z.infer<typeof pertemuanSchema>;
+export type Pertemuan = NewPertemuan & { id: number, statusTimer: 'belum_dimulai' | 'selesai' | 'berjalan' };

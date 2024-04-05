@@ -58,7 +58,7 @@ function Login() {
           <CardHeader>
             <CardTitle>Login</CardTitle>
             <CardDescription>
-              Sebelum mengakses digital scoring diharapkan login terlebih dahulu
+              Sebelum mengakses aplikasi presensi diharapkan login terlebih dahulu
             </CardDescription>
           </CardHeader>
           <Form {...form}>

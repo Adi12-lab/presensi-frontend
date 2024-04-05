@@ -61,7 +61,7 @@ function Prodi() {
                 <TableCell>{prodi.kode}</TableCell>
                 <TableCell>{prodi.nama}</TableCell>
                 <TableCell className="space-x-4">
-                  <Anchor variant={'outline'} size={'icon'} href={`prodi/${prodi.kode}/kelas`}>
+                  <Anchor variant={'outline'} size={'icon'} href={`/admin/prodi/${prodi.kode}/kelas`}>
                     <Network />
                   </Anchor>
                   <Button

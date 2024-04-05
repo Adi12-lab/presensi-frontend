@@ -35,7 +35,7 @@ function Mahasiswa() {
         <Anchor
           variant={"secondary"}
           size="lg"
-          href="/mahasiswa/add"
+          href="/admin/mahasiswa/add"
           className="text-lg mt-4 float-right"
         >
           <PlusSquare className="w-6 h-6 me-4" /> Tambah Mahasiswa

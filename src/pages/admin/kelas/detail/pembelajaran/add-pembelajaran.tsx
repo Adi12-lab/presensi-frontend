@@ -52,10 +52,8 @@ function AddPembelajaran() {
   });
 
   useEffect(() => {
-    if (form && kelasKode) {
-      form.setValue("kelasKode", kelasKode);
-    }
-  }, [form, kelasKode]);
+    form.setValue("kelasKode", kelasKode);
+  }, [form.formState.errors, kelasKode]);
 
   const pembelajaranMutation = useMutation({
     mutationKey: ["add-pembelajaran"],

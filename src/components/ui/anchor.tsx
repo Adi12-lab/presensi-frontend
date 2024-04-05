@@ -17,6 +17,7 @@ const anchorVariants = cva(
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         warning: "bg-amber-500 text-primary-foreground hover:bg-amber-500/90",
+        success: "bg-green-500 text-primary-foreground hover:bg-green-500/90",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
       },

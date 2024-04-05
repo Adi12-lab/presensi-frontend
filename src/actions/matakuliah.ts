@@ -7,7 +7,7 @@ class ServiceMatakuliah {
   async all() {
     return axiosInstance.get(`/matakuliah`).then((data) => data.data);
   }
-  async findByDosen(kode: string) {
+  async findByMatkul(kode: string) {
     return axiosInstance
       .get(`/matakuliah/${kode}/kelas`)
       .then((data) => data.data);

@@ -11,6 +11,11 @@ class ServicePembelajaran {
       .get(`/pembelajaran?kelas=${kelas}`)
       .then((data) => data.data);
   }
+
+  async find(id: number) {
+    return axiosInstance.get(`/pembelajaran/${id}`).then((data) => data.data);
+  }
+
   async update(id: number, payload: NewPembelajaran) {
     return axiosInstance
       .put(`/pembelajaran/${id}`, payload)
