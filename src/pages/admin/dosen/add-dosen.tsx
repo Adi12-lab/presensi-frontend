@@ -63,7 +63,7 @@ function AddDosen() {
     mutationKey: ["add-mahasiswa"],
     mutationFn: ServiceDosen.create,
     onSuccess: () => {
-      window.location.href = "/dosen";
+      window.location.href = "/admin/dosen";
     },
     onError: () => {
       toast.error("Dosen gagal ditambahkan");
@@ -73,7 +73,7 @@ function AddDosen() {
   const akuns = useQuery<Akun[]>({
     queryKey: ["akun"],
     queryFn: async () => {
-      return await ServiceAkun.all("dosen=true");
+      return await ServiceAkun.dosen();
     },
     staleTime: 1000 * 60 * 5,
   });
@@ -86,20 +86,20 @@ function AddDosen() {
   return (
     <Wrapper>
       <div>
-        <h1>Tambah Dosen</h1>
+        <h1 className="font-bold text-2xl">Tambah Dosen</h1>
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="mt-4 space-y-5">
           <FormField
             control={form.control}
             name="nidn"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>No NIDN</FormLabel>
+                <FormLabel>No NIP</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="NIDN"
+                    placeholder="NIP"
                     className="w-[300px]"
                     {...field}
                     disabled={mahasiswaMutation.isPending}

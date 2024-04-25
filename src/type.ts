@@ -1,4 +1,3 @@
-import { AnggotaKelas, NewPembelajaran, Pembelajaran } from "./schema";
 export type EditDeleteOperation = "edit" | "delete";
 
 export type ModalProps<K, T> = {
@@ -8,4 +7,16 @@ export type ModalProps<K, T> = {
   data: T;
 };
 
-export type ComboBoxFor = NewPembelajaran | Pembelajaran | AnggotaKelas;
+
+export type JenisPresensiProps = {
+  label: string;
+  variant:
+    | "default"
+    | "warning"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "link"
+    | "success";
+};

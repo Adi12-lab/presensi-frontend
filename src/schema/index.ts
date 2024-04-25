@@ -104,7 +104,7 @@ export const anggotaKelasSchema = mahasiswaSchema.pick({ nim: true });
 export type AnggotaKelas = z.infer<typeof anggotaKelasSchema>;
 
 export const pertemuanSchema = z.object({
-  pertemuanKe: z.number({ required_error: "Pertemuan ke berapa" }),
+  pertemuanKe: z.number().min(1, { message: "Pertemuan ke berapa" }),
   judulMateri: z.string().min(2, { message: "Judul Pertemuan harus ada" }),
   deskripsiMateri: z.string().min(2, { message: "Deskripsi materi harus ada" }),
   timerPresensi: z.number({ required_error: "timer harus ada" }),
@@ -113,4 +113,18 @@ export const pertemuanSchema = z.object({
 });
 
 export type NewPertemuan = z.infer<typeof pertemuanSchema>;
-export type Pertemuan = NewPertemuan & { id: number, statusTimer: 'belum_dimulai' | 'selesai' | 'berjalan' };
+export type Pertemuan = NewPertemuan & {
+  id: number;
+  statusTimer: "belum_dimulai" | "selesai" | "berjalan";
+};
+
+export type JenisPresensi = "masuk" | "sakit" | "izin" | "alpha";
+// export JenisPresensi =
+export type Presensi = {
+  id: number;
+  jameKe: number;
+  pertemuanId: number;
+  mahasiswaNim: string;
+  jenis: JenisPresensi;
+  keterangan: string;
+};

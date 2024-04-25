@@ -36,7 +36,6 @@ function PlayPresensi() {
   const pertemuan = Number(searchParams.get("pertemuan"));
   const [minute, setMinute] = useState("00:00");
   const [isCountdown, setIsCountdown] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
 
   const [rowSelection, setRowSelection] = useState({});
   const { data = [] } = useQuery<Mahasiswa[]>({
@@ -52,6 +51,7 @@ function PlayPresensi() {
     queryKey: ["pertemuan"],
     queryFn: async () => {
       const result: Pertemuan = await ServicePertemuan.find(pertemuan);
+      console.log(result)
       setMinute(
         formatSeconds(
           result.statusTimer !== "selesai" ? result.timerPresensi : 0
@@ -64,7 +64,7 @@ function PlayPresensi() {
   });
 
   const table = useReactTable({
-    columns: getColumns(),
+    columns: getColumns(socket, pertemuan, isCountdown),
     getRowId: (row) => row.nim,
     data: data as Mahasiswa[],
     getCoreRowModel: getCoreRowModel(),
@@ -93,12 +93,10 @@ function PlayPresensi() {
 
     socket.on("countdown-end", () => {
       setIsCountdown(false);
-      setMinute("00:00");
-      setIsSaving(true);
     });
 
     socket.on("presensi-saved", () => {
-      navigate("/dosen/pertemuan/" + pertemuan);
+      navigate(`/dosen/kelas/${kelas}/pertemuan/${pertemuan}`);
     });
 
     socket.on("presensi-new", (data) => {
@@ -123,7 +121,6 @@ function PlayPresensi() {
   };
 
   const handleStopTimer = () => {
-    setIsSaving(true);
     setIsCountdown(false);
     setMinute("00:00");
     socket.emit("stop-timer", { pertemuan_id: pertemuan });
@@ -190,7 +187,7 @@ function PlayPresensi() {
               ) : (
                 <TableRow>
                   <TableCell
-                    colSpan={getColumns().length}
+                    colSpan={table.getAllColumns().length}
                     className="h-24 text-center"
                   >
                     No results.
@@ -200,12 +197,8 @@ function PlayPresensi() {
             </TableBody>
           </Table>
           <div className="mt-auto ms-auto">
-            <Button
-              variant={"destructive"}
-              disabled={isSaving}
-              onClick={handleStopTimer}
-            >
-              {isSaving ? "Menyimpan" : "Simpan"}
+            <Button variant={"destructive"} onClick={handleStopTimer}>
+              Simpan
             </Button>
           </div>
         </div>

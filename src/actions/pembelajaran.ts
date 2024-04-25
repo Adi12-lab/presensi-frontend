@@ -6,13 +6,14 @@ class ServicePembelajaran {
       .post("/pembelajaran", payload)
       .then((data) => data.data);
   }
-  async all(kelas: string) {
+  async all(kelas?: string) {
     return axiosInstance
-      .get(`/pembelajaran?kelas=${kelas}`)
+      .get(`/pembelajaran${kelas ? `?kelas=${kelas}` : ""}`)
       .then((data) => data.data);
   }
 
   async find(id: number) {
+    console.log(id);
     return axiosInstance.get(`/pembelajaran/${id}`).then((data) => data.data);
   }
 

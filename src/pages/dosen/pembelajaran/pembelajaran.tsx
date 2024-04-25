@@ -14,14 +14,16 @@ function Pembelajaran() {
     },
   });
 
-  return data && (
-    <Wrapper>
-      Pembelajaran
-      <Pertemuan
-        kelas={data.kelas.kode}
-        pembelajaran={parseInt(pembelajaran as string)}
-      />
-    </Wrapper>
+  return (
+    data && (
+      <Wrapper>
+        <h1 className="font-bold text-xl">Pembelajaran</h1>
+        <Pertemuan
+          kelas={data.kelas.kode}
+          pembelajaran={parseInt(pembelajaran as string)}
+        />
+      </Wrapper>
+    )
   );
 }
 

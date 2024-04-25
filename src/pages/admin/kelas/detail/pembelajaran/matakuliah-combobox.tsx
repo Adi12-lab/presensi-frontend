@@ -16,18 +16,15 @@ import {
   PopoverTrigger,
 } from "~/components/ui/popover";
 import ServiceMatakuliah from "~/actions/matakuliah";
-import { Matakuliah, NewPembelajaran, Pembelajaran } from "~/schema";
-import { UseFormReturn, FieldValues } from "react-hook-form";
+import { Matakuliah} from "~/schema";
 import { useQuery } from "@tanstack/react-query";
 
-interface ComboBoxProps<Form extends FieldValues> {
-  form: UseFormReturn<Form>;
-  field: keyof Form;
-}
+export type ComboBoxProps = {
+  value: string;
+  onValueChange: (value: string) => void;
+};
 
-function MatakuliahComboBox({ form, field }: ComboBoxProps<NewPembelajaran | Pembelajaran>) {
-  const [matakuliahSelected, setMatakuliahSelected] = useState("");
-
+function MatakuliahComboBox({ value, onValueChange }: ComboBoxProps) {
   const { data } = useQuery<Matakuliah[]>({
     queryKey: ["matakuliah", "combobox"],
     queryFn: ServiceMatakuliah.all,
@@ -42,12 +39,10 @@ function MatakuliahComboBox({ form, field }: ComboBoxProps<NewPembelajaran | Pem
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className={cn(
-              "w-full justify-between"
-            )}
+            className={cn("w-full justify-between")}
           >
-            {matakuliahSelected
-              ? data.find((ps) => ps.nama === matakuliahSelected)?.nama
+            {value
+              ? data.find((ps) => ps.kode === value)?.nama
               : "Pilih matakuliah"}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
@@ -61,18 +56,15 @@ function MatakuliahComboBox({ form, field }: ComboBoxProps<NewPembelajaran | Pem
                 <CommandItem
                   value={matakuliah.nama}
                   key={matakuliah.kode}
-                  onSelect={(currentMatakuliah) => {
-                    setMatakuliahSelected(
-                      currentMatakuliah === matakuliah.nama ? "" : matakuliah.nama
-                    );
-                    form.setValue(field, matakuliah.kode);
+                  onSelect={() => {
                     setOpen(false);
+                    onValueChange(matakuliah.kode);
                   }}
                 >
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      matakuliah.nama === matakuliahSelected ? "opacity-100" : "opacity-0"
+                      matakuliah.kode === value ? "opacity-100" : "opacity-0"
                     )}
                   />
                   {matakuliah.nama}

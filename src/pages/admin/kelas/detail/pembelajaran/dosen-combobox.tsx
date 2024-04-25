@@ -16,17 +16,15 @@ import {
   PopoverTrigger,
 } from "~/components/ui/popover";
 import ServiceDosen from "~/actions/dosen";
-import { Dosen, NewPembelajaran, Pembelajaran } from "~/schema";
-import { UseFormReturn, FieldValues } from "react-hook-form";
+import { Dosen } from "~/schema";
 import { useQuery } from "@tanstack/react-query";
 
-interface ComboBoxProps<Form extends FieldValues> {
-  form: UseFormReturn<Form>;
-  field: keyof Form;
+type ComboBoxProps = {
+  value: string;
+  onValueChange: (value: string) => void;
 }
 
-function DosenComboBox({ form, field }: ComboBoxProps<NewPembelajaran | Pembelajaran>) {
-  const [dosenSelected, setDosenSelected] = useState("");
+function DosenComboBox({ value, onValueChange }: ComboBoxProps) {
 
   const { data } = useQuery<Dosen[]>({
     queryKey: ["dosen", "combobox"],
@@ -47,12 +45,9 @@ function DosenComboBox({ form, field }: ComboBoxProps<NewPembelajaran | Pembelaj
               // !.value && "text-muted-foreground"
             )}
           >
-            {dosenSelected
-              ? data.find((ps) => ps.nama === dosenSelected)?.nama
+            {value
+              ? data.find((ps) => ps.nidn === value)?.nama
               : "Pilih dosen"}
-            {/* {pesertaSelected
-          ? peserta.find((ps) => ps.nama === pesertaSelected.nama)?.nama
-          : "pilih peserta"} */}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -65,18 +60,15 @@ function DosenComboBox({ form, field }: ComboBoxProps<NewPembelajaran | Pembelaj
                 <CommandItem
                   value={dosen.nama}
                   key={dosen.nidn}
-                  onSelect={(currentDosen) => {
-                    setDosenSelected(
-                      currentDosen === dosen.nama ? "" : dosen.nama
-                    );
-                    form.setValue(field, dosen.nidn);
+                  onSelect={() => {
+                    onValueChange(dosen.nidn)
                     setOpen(false);
                   }}
                 >
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      dosen.nama === dosenSelected ? "opacity-100" : "opacity-0"
+                      dosen.nidn === value ? "opacity-100" : "opacity-0"
                     )}
                   />
                   {dosen.nama}

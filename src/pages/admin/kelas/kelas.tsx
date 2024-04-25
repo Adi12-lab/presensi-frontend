@@ -35,7 +35,7 @@ function Kelas() {
     editDeleteOperation: "delete",
   });
   const { data } = useQuery({
-    queryKey: ["kelas"],
+    queryKey: ["kelas", prodi],
     queryFn: async () => {
       if (prodi) {
         return await ServiceKelas.allByProdi(prodi.toString());
@@ -73,7 +73,7 @@ function Kelas() {
                   <Anchor
                     variant="outline"
                     size={"icon"}
-                    href={`/kelas/${kelas.kode}`}
+                    href={`/admin/kelas/${kelas.kode}`}
                   >
                     <SquareUser />
                   </Anchor>

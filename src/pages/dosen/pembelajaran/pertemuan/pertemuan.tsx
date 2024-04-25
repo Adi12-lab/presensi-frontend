@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   useReactTable,
@@ -20,6 +21,13 @@ import {
 import ServicePertemuan from "~/actions/pertemuan";
 import { Pertemuan as PertemuanType } from "~/schema";
 import { Anchor } from "~/components/ui/anchor";
+import DeletePertemuan from "./delete-pertemuan";
+import { EditDeleteOperation } from "~/type";
+
+export type DataModal = {
+  data?: PertemuanType;
+  operation: EditDeleteOperation;
+};
 
 interface PertemuanProps {
   pembelajaran: number;
@@ -27,6 +35,10 @@ interface PertemuanProps {
 }
 
 function Pertemuan({ pembelajaran, kelas }: PertemuanProps) {
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [dataModal, setDataModal] = useState<DataModal>({
+    operation: "delete",
+  });
   const { data = [] } = useQuery<PertemuanType[]>({
     queryKey: ["pertemuan", { pembelajaran }],
     queryFn: async () => {
@@ -37,16 +49,16 @@ function Pertemuan({ pembelajaran, kelas }: PertemuanProps) {
 
   const table = useReactTable({
     data: data as PertemuanType[],
-    columns: getTableColumns(kelas),
+    columns: getTableColumns(kelas, setDataModal, setOpenDeleteModal),
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (
     <>
-      <h2>Pertemuan</h2>
+      <h2 className="font-bold text-lg">Detail Pertemuan</h2>
       <Anchor
-        href="add-pertemuan"
+        href={`/dosen/pembelajaran/${pembelajaran}/add-pertemuan`}
         variant={"secondary"}
         size="lg"
         className="text-lg mt-4 float-right"
@@ -78,7 +90,7 @@ function Pertemuan({ pembelajaran, kelas }: PertemuanProps) {
             table.getRowModel().rows.map((row) => (
               <TableRow key={row.id}>
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
+                  <TableCell key={cell.id} className="space-x-3">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
@@ -86,6 +98,13 @@ function Pertemuan({ pembelajaran, kelas }: PertemuanProps) {
             ))}
         </TableBody>
       </Table>
+
+      <DeletePertemuan
+        isOpen={openDeleteModal}
+        setIsOpen={setOpenDeleteModal}
+        data={dataModal.data as PertemuanType}
+        operation={dataModal.operation as EditDeleteOperation}
+      />
     </>
   );
 }

@@ -33,7 +33,7 @@ function Dosen() {
         <Anchor
           variant={"secondary"}
           size="lg"
-          href="/dosen/add"
+          href="/admin/dosen/add"
           className="text-lg mt-4 float-right"
         >
           <PlusSquare className="w-6 h-6 me-4" /> Tambah Dosen
@@ -42,7 +42,7 @@ function Dosen() {
           <TableCaption>Daftar Dosen</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead>NIDN</TableHead>
+              <TableHead>NIP</TableHead>
               <TableHead>Nama</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Aksi</TableHead>
@@ -58,7 +58,7 @@ function Dosen() {
                   <Anchor
                     variant={"warning"}
                     size="icon"
-                    href={`/dosen/${dosen.nidn}/edit`}
+                    href={`/admin/dosen/${dosen.nidn}/edit`}
                   >
                     <Pencil />
                   </Anchor>

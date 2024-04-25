@@ -13,6 +13,8 @@ const AddPertemuan = lazy(
 const PlayPresensi = lazy(
   () => import("~/pages/dosen/play-presensi/play-presensi")
 );
+
+const Pertemuan = lazy(() => import("~/pages/dosen/pertemuan/pertemuan"));
 function RouteForDosen() {
   return (
     <Route>
@@ -24,7 +26,7 @@ function RouteForDosen() {
         <Route path=":pembelajaran" element={<Pembelajaran />} />
         <Route path=":pembelajaran/add-pertemuan" element={<AddPertemuan />} />
       </Route>
-        <Route path="pertemuan/:pertemuan" />
+
       <Route path="kelas">
         <Route
           path=":kelas/play-presensi"
@@ -34,6 +36,7 @@ function RouteForDosen() {
             </SocketProvider>
           }
         />
+        <Route path=":kelas/pertemuan/:pertemuan" element={<Pertemuan />} />
       </Route>
     </Route>
   );

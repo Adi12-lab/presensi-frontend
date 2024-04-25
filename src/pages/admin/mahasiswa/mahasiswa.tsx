@@ -60,7 +60,7 @@ function Mahasiswa() {
                   <Anchor
                     variant={"warning"}
                     size="icon"
-                    href={`/mahasiswa/${mahasiswa.nim}/edit`}
+                    href={`/admin/mahasiswa/${mahasiswa.nim}/edit`}
                   >
                     <Pencil />
                   </Anchor>

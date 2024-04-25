@@ -1,7 +1,15 @@
 import { useState, useContext } from "react";
 import { Sidebar as SidebarComponent, Menu, MenuItem } from "react-pro-sidebar";
 import { NavLink, useLocation } from "react-router-dom";
-import { GripVertical, Home, Power } from "lucide-react";
+import {
+  BookA,
+  BringToFront,
+  GripVertical,
+  Home,
+  Power,
+  User,
+  UsersRound,
+} from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 
 import { AuthContext } from "~/context/auth";
@@ -18,6 +26,7 @@ interface SidebarProps {
 
 type NavLinksType = {
   link: string;
+  icon?: React.ReactNode;
   label: string;
   role: Array<Role>;
 };
@@ -37,13 +46,54 @@ function Sidebar({ toggled, setToggled, setBroken }: SidebarProps) {
   });
 
   const navlinks: NavLinksType[] = [
-    { link: "/dashboard", label: "Dashboard", role: ["admin", "dosen"] },
-    { link: "/admin/akun", label: "Akun", role: ["admin"] },
-    { link: "/admin/dosen", label: "Dosen", role: ["admin"] },
-    { link: "/admin/mahasiswa", label: "Mahasiswa", role: ["admin"] },
-    { link: "/admin/prodi", label: "Program Studi", role: ["admin"] },
-    { link: "/admin/matakuliah", label: "Matakuliah", role: ["admin"] },
-    { link: "/dosen/matakuliah", label: "Matakuliah", role: ["dosen"] },
+    {
+      link: "/dashboard",
+      label: "Dashboard",
+      icon: <Home size={20} />,
+      role: ["admin", "dosen", "mahasiswa"],
+    },
+    {
+      link: "/admin/akun",
+      label: "Akun",
+      icon: <User size={20} />,
+      role: ["admin"],
+    },
+    {
+      link: "/admin/dosen",
+      label: "Dosen",
+      icon: <UsersRound size={20} />,
+      role: ["admin"],
+    },
+    {
+      link: "/admin/mahasiswa",
+      label: "Mahasiswa",
+      icon: <UsersRound size={20} />,
+      role: ["admin"],
+    },
+    {
+      link: "/admin/prodi",
+      label: "Program Studi",
+      icon: <BringToFront size={20} />,
+      role: ["admin"],
+    },
+    {
+      link: "/admin/matakuliah",
+      label: "Matakuliah",
+      icon: <BookA size={20} />,
+      role: ["admin"],
+    },
+    {
+      link: "/dosen/matakuliah",
+      label: "Matakuliah",
+      icon: <BookA size={20} />,
+      role: ["dosen"],
+    },
+    {
+      link: "/mahasiswa/pembelajaran",
+      label: "Pembelajaran",
+      icon: <BookA size={20} />,
+      role: ["mahasiswa"],
+    },
   ];
 
   return (
@@ -91,19 +141,18 @@ function Sidebar({ toggled, setToggled, setBroken }: SidebarProps) {
           },
         }}
       >
-        {navlinks.map((link) =>
-          link.role.includes(akun.role) ? (
-            <MenuItem
-              key={link.link}
-              component={<NavLink to={link.link} />}
-              icon={<Home size={20} />}
-              active={location.pathname === link.link}
-            >
-              {link.label}
-            </MenuItem>
-          ) : (
-            ""
-          )
+        {navlinks.map(
+          (link) =>
+            link.role.includes(akun.role) && (
+              <MenuItem
+                key={link.link}
+                component={<NavLink to={link.link} />}
+                icon={link.icon || <Home size={20} />}
+                active={location.pathname === link.link}
+              >
+                {link.label}
+              </MenuItem>
+            )
         )}
         <MenuItem icon={<Power />} onClick={() => logoutMutation.mutate()}>
           Logout

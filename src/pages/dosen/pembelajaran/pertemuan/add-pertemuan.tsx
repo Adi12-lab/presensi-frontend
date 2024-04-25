@@ -35,7 +35,7 @@ import { NewPertemuan, pertemuanSchema } from "~/schema";
 import { generateArrayNumber } from "~/lib/utils";
 function AddPertemuan() {
   const { pembelajaran } = useParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof pertemuanSchema>>({
     resolver: zodResolver(pertemuanSchema),
     defaultValues: {
@@ -48,21 +48,18 @@ function AddPertemuan() {
     },
   });
 
+
   useEffect(() => {
     if (form && pembelajaran) {
-      console.log(pembelajaran)
       form.setValue("pembelajaranId", parseInt(pembelajaran));
     }
   }, [form, pembelajaran]);
-
-  // useEffect(() => {
-  //   console.log(form.formState.errors);
-  // }, [form.formState.errors]);
+  
   const pertemuanMutation = useMutation({
     mutationKey: ["add-pertemuan"],
     mutationFn: ServicePertemuan.create,
     onSuccess: () => {
-        navigate("/admin/");
+      navigate(`/dosen/pembelajaran/${pembelajaran}`);
     },
     onError: () => {
       toast.error("Pertemuan gagal ditambahkan");
@@ -75,7 +72,9 @@ function AddPertemuan() {
 
   return (
     <Wrapper>
-      <h1 className="font-bold bg-yellow-300 p-4 rounded-xl">Tambah Pertemuan</h1>
+      <h1 className="font-bold bg-yellow-300 p-4 rounded-xl">
+        Tambah Pertemuan
+      </h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 py-6">
           <FormField
@@ -87,7 +86,7 @@ function AddPertemuan() {
                 <FormControl>
                   <Select
                     onValueChange={(value) => field.onChange(Number(value))}
-                    defaultValue="1"
+                    value={field.value.toString()}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -176,7 +175,7 @@ function AddPertemuan() {
           >
             {pertemuanMutation.isPending ? (
               <React.Fragment>
-                <Loader2 />
+                <Loader2 className="animate-spin" />
                 Menyimpan
               </React.Fragment>
             ) : (

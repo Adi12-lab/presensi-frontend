@@ -6,10 +6,7 @@ const Login = lazy(() => import("./pages/login"));
 const Dashboard = lazy(() => import("./pages/dashboard"));
 import RouteForAdmin from "./routes/admin";
 import RouteForDosen from "./routes/dosen";
-
-//Admin
-
-//Dosen
+import RouteForMahasiswa from "./routes/mahasiwa";
 
 function App() {
   return (
@@ -27,6 +24,13 @@ function App() {
 
           <Route path="/dosen" element={<ProtectedRoute roles={["dosen"]} />}>
             {RouteForDosen()}
+          </Route>
+
+          <Route
+            path="/mahasiswa"
+            element={<ProtectedRoute roles={["mahasiswa"]} />}
+          >
+            {RouteForMahasiswa()}
           </Route>
         </Routes>
       </Suspense>

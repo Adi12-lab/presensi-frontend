@@ -22,6 +22,7 @@ import { PembelajaranComplete } from "~/schema";
 import { EditDeleteOperation } from "~/type";
 
 import DeletePembelajaran from "./delete-pembelajaran";
+import EditPembelajaran from "./edit-pembelajaran";
 import { KelasContext } from "../detail-kelas";
 
 export type DataModal = {
@@ -86,6 +87,12 @@ function Pembelajaran() {
         </TableBody>
       </Table>
 
+      <EditPembelajaran
+        data={dataModal.data as PembelajaranComplete}
+        isOpen={openModal}
+        operation={dataModal.editDeleteOperation}
+        setIsOpen={setOpenModal}
+      />
       <DeletePembelajaran
         data={dataModal.data as PembelajaranComplete}
         isOpen={openModal}

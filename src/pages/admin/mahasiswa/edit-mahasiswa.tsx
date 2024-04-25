@@ -69,18 +69,21 @@ function EditMahasiswa() {
     enabled: nim !== undefined,
   });
 
+  // useEffect(()=> {
+  //   console.log(form.formState.errors)
+  // }, [form.formState.errors])
   useEffect(() => {
     if (data) {
       form.setValue("nim", data.nim);
       form.setValue("nama", data.nama);
-      form.setValue("akunUsername", data.akunUsername);
+      form.setValue("akunUsername", data.akunUsername || "");
       form.setValue("email", data.email);
       form.setValue("kelamin", data.kelamin);
     }
   }, [data, form]);
 
   const mahasiswaMutation = useMutation({
-    mutationKey: ["update-dosen"],
+    mutationKey: ["update-mahasiswa"],
     mutationFn: async (paylod: Mahasiswa) => {
       return await ServiceMahasiswa.update(nim as string, paylod);
     },

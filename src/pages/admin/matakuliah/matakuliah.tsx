@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Trash2, Pencil, Network } from "lucide-react";
+import { Trash2, Pencil} from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
 import { EditDeleteOperation } from "~/type";
@@ -20,7 +20,6 @@ import AddMatakuliah from "./add-matakuliah";
 import DeleteMatakuliah from "./delete-matakuliah";
 import EditProdi from "./edit-matakuliah";
 import Wrapper from "~/components/layout/wrapper";
-import { Anchor } from "~/components/ui/anchor";
 
 type DataModal = {
   data?: MatakuliahType;
@@ -46,7 +45,7 @@ function Matakuliah() {
 
       <AddMatakuliah />
       <Table className="mt-10">
-        <TableCaption>Daftar Prodi</TableCaption>
+        <TableCaption>Daftar Matakuliah</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead>Kode</TableHead>
@@ -61,9 +60,6 @@ function Matakuliah() {
                 <TableCell>{matakuliah.kode}</TableCell>
                 <TableCell>{matakuliah.nama}</TableCell>
                 <TableCell className="space-x-4">
-                  <Anchor variant={'outline'} size={'icon'} href={`matakuliah/${matakuliah.kode}/kelas`}>
-                    <Network />
-                  </Anchor>
                   <Button
                     variant={"warning"}
                     size="icon"

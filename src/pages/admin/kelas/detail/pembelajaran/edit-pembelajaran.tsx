@@ -1,10 +1,9 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { z } from "zod";
 import toast from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { PlusSquare } from "lucide-react";
 
 import ServicePembelajaran from "~/actions/pembelajaran";
 import {
@@ -13,7 +12,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "~/components/ui/dialog";
 
 import {
@@ -25,7 +23,11 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 
-import { NewPembelajaran, pembelajaranSchema } from "~/schema";
+import {
+  NewPembelajaran,
+  PembelajaranComplete,
+  pembelajaranSchema,
+} from "~/schema";
 
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -33,11 +35,17 @@ import { Input } from "~/components/ui/input";
 import DosenComboBox from "./dosen-combobox";
 import MatakuliahComboBox from "./matakuliah-combobox";
 import { KelasContext } from "../detail-kelas";
-function AddPembelajaran() {
+import { EditDeleteOperation, ModalProps } from "~/type";
+
+function EditPembelajaran({
+  data,
+  operation,
+  isOpen,
+  setIsOpen,
+}: ModalProps<EditDeleteOperation, PembelajaranComplete>) {
   const kelasKode = useContext(KelasContext);
   const queryClient = useQueryClient();
 
-  const [openDialog, setOpenDialog] = useState(false);
   const form = useForm<z.infer<typeof pembelajaranSchema>>({
     resolver: zodResolver(pembelajaranSchema),
     defaultValues: {
@@ -53,18 +61,25 @@ function AddPembelajaran() {
 
   useEffect(() => {
     form.setValue("kelasKode", kelasKode);
-  }, [form.formState.errors, kelasKode]);
+    if (data) {
+      form.setValue("dosenNidn", data.dosenNidn);
+      form.setValue("matakuliahKode", data.matakuliahKode);
+      form.setValue("semester", data.semester);
+      form.setValue("tahunPembelajaran", data.tahunPembelajaran);
+      form.setValue("sks", data.sks);
+    }
+  }, [form.formState.errors, kelasKode, data]);
 
   const pembelajaranMutation = useMutation({
     mutationKey: ["add-pembelajaran"],
     mutationFn: ServicePembelajaran.create,
     onSuccess: () => {
-      toast.success(`Pembelajaran berhasil ditambahkan`);
-      setOpenDialog(false);
+      toast.success(`Pembelajaran berhasil diupdate`);
+      setIsOpen(false);
       queryClient.invalidateQueries({ queryKey: ["pembelajaran"] });
     },
     onError: () => {
-      toast.error("Pembelajaran gagal ditambahkan");
+      toast.error("Pembelajaran gagal diupdate");
     },
   });
 
@@ -73,21 +88,12 @@ function AddPembelajaran() {
   }
   return (
     <Dialog
-      open={openDialog}
+      open={isOpen && operation === "edit"}
       onOpenChange={() => {
         form.reset();
-        setOpenDialog(!openDialog);
+        setIsOpen(!isOpen);
       }}
     >
-      <DialogTrigger asChild>
-        <Button
-          variant={"secondary"}
-          size="lg"
-          className="text-lg mt-4 float-right"
-        >
-          <PlusSquare className="w-6 h-6 me-4" /> Tambah Pembelajaran
-        </Button>
-      </DialogTrigger>
       {kelasKode && (
         <DialogContent>
           <DialogHeader>
@@ -166,11 +172,14 @@ function AddPembelajaran() {
               <FormField
                 control={form.control}
                 name="matakuliahKode"
-                render={({field}) => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel>Matakuliah</FormLabel>
                     <FormControl>
-                      <MatakuliahComboBox value={field.value} onValueChange={field.onChange} />
+                      <MatakuliahComboBox
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -180,11 +189,14 @@ function AddPembelajaran() {
               <FormField
                 control={form.control}
                 name="dosenNidn"
-                render={({field}) => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel>Dosen Pengampu</FormLabel>
                     <FormControl>
-                      <DosenComboBox  value={field.value} onValueChange={field.onChange}/>
+                      <DosenComboBox
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -204,4 +216,4 @@ function AddPembelajaran() {
   );
 }
 
-export default AddPembelajaran;
+export default EditPembelajaran;

@@ -91,7 +91,7 @@ function EditDosen() {
       return await ServiceDosen.update(nidn as string, paylod);
     },
     onSuccess: () => {
-      window.location.href = "/dosen";
+      window.location.href = "/admin/dosen";
     },
     onError: () => {
       toast.error("Dosen gagal diupdate");
@@ -106,20 +106,20 @@ function EditDosen() {
   return (
     <Wrapper>
       <div>
-        <h1>Tambah Edit</h1>
+        <h1  className="font-bold text-2xl">Edit Dosen</h1>
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="mt-4 space-y-5">
           <FormField
             control={form.control}
             name="nidn"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>No NIDN</FormLabel>
+                <FormLabel>No NIP</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="NIDN"
+                    placeholder="NIP"
                     className="w-[300px]"
                     {...field}
                     disabled={dosenMutation.isPending}
