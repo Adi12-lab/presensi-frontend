@@ -12,8 +12,8 @@ export type KelasProdi = KelasWithPembelajaran & {
 
 export const columns: ColumnDef<KelasProdi>[] = [
     {
-      header: "KELAS",
-      id: "kelas",
+      header: "KODE",
+      id: "kode",
       accessorFn: (row) => `${row.prodi.kode} ${row.nama} ${row.angkatan}`,
       cell: ({ row }) => {
         const kelas = row.original;
@@ -23,6 +23,10 @@ export const columns: ColumnDef<KelasProdi>[] = [
           </span>
         );
       },
+    },
+    {
+      accessorKey: 'nama',
+      header: 'KELAS'
     },
     {
       header: "PROGRAM STUDI",

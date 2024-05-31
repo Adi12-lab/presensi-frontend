@@ -1,11 +1,14 @@
 import { Route } from "react-router-dom";
+import SocketProvider from "~/context/socket";
 import { lazy } from "react";
 
 const Pembelajaran = lazy(
   () => import("~/pages/mahasiswa/pembelajaran/pembelajaran")
 );
 const Pertemuan = lazy(() => import("~/pages/mahasiswa/pertemuan/index"));
-const JoinPertemuan = lazy(()=> import('~/pages/mahasiswa/join-pertemuan/join-pertemuan'))
+const JoinPertemuan = lazy(
+  () => import("~/pages/mahasiswa/join-pertemuan/join-pertemuan")
+);
 
 export default function RouteForMahasiswa() {
   return (
@@ -15,7 +18,14 @@ export default function RouteForMahasiswa() {
         <Route path=":pembelajaran" element={<Pertemuan />} />
       </Route>
       <Route path="pertemuan">
-        <Route path="" element={<JoinPertemuan />} />
+        <Route
+          path=":pertemuan"
+          element={
+            <SocketProvider>
+              <JoinPertemuan />
+            </SocketProvider>
+          }
+        />
       </Route>
     </Route>
   );

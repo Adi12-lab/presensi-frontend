@@ -110,11 +110,11 @@ function Sidebar({ toggled, setToggled, setBroken }: SidebarProps) {
     >
       <div className="p-6 bg-zinc-600 flex justify-between">
         <h1
-          className={`font-bold text-xl text-nowrap text-stone-300 ${
+          className={`font-bold text-xl text-nowrap text-stone-300 capitalize ${
             collapsed ? "hidden" : ""
           }`}
         >
-          Admin Page
+          {akun.role}
         </h1>
         <button type="button" onClick={() => setCollapsed(!collapsed)}>
           <GripVertical className="text-stone-400 hover:text-stone-300" />

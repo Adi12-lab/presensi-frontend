@@ -59,9 +59,9 @@ function Kelas() {
           <Search className="absolute top-2.5 left-2" size={20} />
           <Input
             placeholder="Cari Kelas"
-            value={(table.getColumn("kelas")?.getFilterValue() as string) ?? ""}
+            value={(table.getColumn("kode")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
-              table.getColumn("kelas")?.setFilterValue(event.target.value)
+              table.getColumn("kode")?.setFilterValue(event.target.value)
             }
             className="max-w-sm pl-10"
           />

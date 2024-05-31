@@ -162,7 +162,10 @@ const MahasiswaPresensi = ({
 }) => {
   const { setData } = usePresensiStore();
   const { setIsOpen } = useSimpleModal();
-  const { data = [], isPending } = useQuery<PresensiType[]>({
+  const { data, isPending } = useQuery<{
+    result: PresensiType[];
+    presentaseKehadiran: number;
+  }>({
     queryKey: ["presensi-mahasiswa", nim, pertemuan],
     queryFn: async () => {
       return ServicePresensi.all(nim, pertemuan);
@@ -176,7 +179,7 @@ const MahasiswaPresensi = ({
 
   return (
     data &&
-    data.map((prens) => (
+    data.result.map((prens) => (
       <div
         className="border-r border-black py-3 flex items-center justify-center"
         key={prens.id}

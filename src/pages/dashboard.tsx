@@ -4,7 +4,8 @@ import { useContext } from "react";
 import Wrapper from "~/components/layout/wrapper";
 import { Anchor } from "~/components/ui/anchor";
 import { AuthContext } from "~/context/auth";
-import { axiosInstance } from "~/lib/utils";
+import { axiosInstance, formatTanggal } from "~/lib/utils";
+import { Kelas, Matakuliah, Pertemuan } from "~/schema";
 export default function Dashboard() {
   const { akun } = useContext(AuthContext);
   const { data: detailAkun } = useQuery({
@@ -52,20 +53,60 @@ export default function Dashboard() {
           </tbody>
         </table>
       )}
-      <div className="mt-4">
-        <h1 className="font-bold text-lg">Pertemuan Aktif</h1>
-        <div className="grid grid-cols-3 mt-3">
-          <div className="border-2 border-blue-400 shadow-lg p-5 text-center rounded-xl">
-            <h4 className="font-semibold text-[19px] uppercase">Matakuliah</h4>
-            <span className="text-[14px]">Tanggal</span>
-            <h5 className="text-[17px] font-medium">&#034; Judul Pertemuan &#034;</h5>
-            <p className="mt-2 text-[14px]">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi, in.</p>
-            <Anchor className="uppercase mt-3 tracking-widest" href="">
-              join pertemuan
-            </Anchor>
-          </div>
-        </div>
-      </div>
+      {(akun.role === "mahasiswa" || akun.role === "dosen") && (
+        <ActivePertemuan role={akun.role} />
+      )}
     </Wrapper>
   );
 }
+
+function ActivePertemuan({ role }: { role: "mahasiswa" | "dosen" }) {
+  const { data } = useQuery<
+    { matakuliah: Matakuliah; pertemuan: Pertemuan; kelas?: Kelas }[]
+  >({
+    queryKey: ["active-pertemuan"],
+    queryFn: async () => {
+      return axiosInstance
+        .get("/pertemuan/active-pertemuan")
+        .then((data) => data.data);
+    },
+  });
+  return (
+    (data && data.length > 0) && (
+      <div className="mt-4">
+        <h1 className="font-bold text-lg">Pertemuan Aktif</h1>
+        <div className="grid md:grid-cols-3 mt-3">
+          {data.map((per) => (
+            <div className="border-2 border-blue-400 shadow-lg p-5 text-center rounded-xl">
+              <h4 className="font-semibold text-[19px] uppercase">
+                {per.matakuliah.nama}
+              </h4>
+              <span className="text-[14px]">
+                {formatTanggal(new Date(per.pertemuan.tanggal))}
+              </span>
+              <h5 className="text-[17px] font-medium">
+                &#034; {per.pertemuan.judulMateri} &#034;
+              </h5>
+              <p className="mt-2 text-[14px]">
+                {per.pertemuan.deskripsiMateri}
+              </p>
+              {role === "dosen" && <p>{per.kelas?.nama}</p>}
+              <Anchor
+                className="uppercase mt-3 tracking-widest"
+                href={
+                  role === "dosen"
+                    ? `/dosen/kelas/${per.kelas?.kode}/play-presensi?pertemuan=${per.pertemuan.id}`
+                    : `/mahasiswa/pertemuan/${per.pertemuan.id}`
+                }
+              >
+                join pertemuan
+              </Anchor>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  );
+}
+
+export { ActivePertemuan };

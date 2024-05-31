@@ -5,7 +5,7 @@ import SocketProvider from "~/context/socket";
 const Kelas = lazy(() => import("~/pages/dosen/kelas/kelas"));
 const Matakuliah = lazy(() => import("~/pages/dosen/matakuliah/matakuliah"));
 const Pembelajaran = lazy(
-  () => import("~/pages/dosen/pembelajaran/pembelajaran")
+  () => import("~/pages/dosen/pembelajaran/index")
 );
 const AddPertemuan = lazy(
   () => import("~/pages/dosen/pembelajaran/pertemuan/add-pertemuan")
