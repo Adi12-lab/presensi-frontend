@@ -7,11 +7,13 @@ class ServiceAkun {
   async all() {
     return axiosInstance.get(`/akun`).then((data) => data.data);
   }
-  async mahasiswa() {
-    return axiosInstance.get("/akun/mahasiswa").then((data) => data.data);
+  async mahasiswa({ relation }: { relation: number }) {
+    return axiosInstance
+      .get(`/akun/mahasiswa?relation=${relation}`)
+      .then((data) => data.data);
   }
   async dosen() {
-    return axiosInstance.get('/akun/dosen').then(data => data.data)
+    return axiosInstance.get("/akun/dosen").then((data) => data.data);
   }
   async update(username: string, payload: AkunEdit) {
     return axiosInstance

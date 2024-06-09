@@ -200,7 +200,7 @@ function AddDosen() {
                     </FormControl>
                   </PopoverTrigger>
 
-                  <PopoverContent className="w-[200px] p-0">
+                  <PopoverContent className="w-[200px] h-[200px] p-0">
                     <Command>
                       <CommandInput placeholder="Cari Akun..." />
                       <CommandEmpty>Akun tidak ditemukan.</CommandEmpty>

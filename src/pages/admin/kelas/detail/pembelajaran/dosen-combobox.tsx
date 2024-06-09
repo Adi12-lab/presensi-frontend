@@ -18,14 +18,14 @@ import {
 import ServiceDosen from "~/actions/dosen";
 import { Dosen } from "~/schema";
 import { useQuery } from "@tanstack/react-query";
+import { ScrollArea } from "~/components/ui/scroll-area";
 
 type ComboBoxProps = {
   value: string;
   onValueChange: (value: string) => void;
-}
+};
 
 function DosenComboBox({ value, onValueChange }: ComboBoxProps) {
-
   const { data } = useQuery<Dosen[]>({
     queryKey: ["dosen", "combobox"],
     queryFn: ServiceDosen.all,
@@ -45,36 +45,36 @@ function DosenComboBox({ value, onValueChange }: ComboBoxProps) {
               // !.value && "text-muted-foreground"
             )}
           >
-            {value
-              ? data.find((ps) => ps.nidn === value)?.nama
-              : "Pilih dosen"}
+            {value ? data.find((ps) => ps.nidn === value)?.nama : "Pilih dosen"}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-full p-0">
+        <PopoverContent className="w-full h-[200px] p-0">
           <Command>
             <CommandInput placeholder="cari peserta" />
             <CommandEmpty>Dosen tidak ditemukan</CommandEmpty>
-            <CommandGroup>
-              {data.map((dosen) => (
-                <CommandItem
-                  value={dosen.nama}
-                  key={dosen.nidn}
-                  onSelect={() => {
-                    onValueChange(dosen.nidn)
-                    setOpen(false);
-                  }}
-                >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      dosen.nidn === value ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                  {dosen.nama}
-                </CommandItem>
-              ))}
-            </CommandGroup>
+            <ScrollArea>
+              <CommandGroup>
+                {data.map((dosen) => (
+                  <CommandItem
+                    value={dosen.nama}
+                    key={dosen.nidn}
+                    onSelect={() => {
+                      onValueChange(dosen.nidn);
+                      setOpen(false);
+                    }}
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        dosen.nidn === value ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                    {dosen.nama}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </ScrollArea>
           </Command>
         </PopoverContent>
       </Popover>

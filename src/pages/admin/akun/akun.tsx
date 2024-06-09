@@ -48,7 +48,7 @@ function Prodi() {
 
       <AddAkun />
       <Table className="mt-10">
-        <TableCaption>Daftar Prodi</TableCaption>
+        <TableCaption>Daftar Akun</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead>Username</TableHead>

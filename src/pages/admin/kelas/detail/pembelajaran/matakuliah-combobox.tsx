@@ -16,8 +16,9 @@ import {
   PopoverTrigger,
 } from "~/components/ui/popover";
 import ServiceMatakuliah from "~/actions/matakuliah";
-import { Matakuliah} from "~/schema";
+import { Matakuliah } from "~/schema";
 import { useQuery } from "@tanstack/react-query";
+import { ScrollArea } from "~/components/ui/scroll-area";
 
 export type ComboBoxProps = {
   value: string;
@@ -47,30 +48,32 @@ function MatakuliahComboBox({ value, onValueChange }: ComboBoxProps) {
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-full p-0">
+        <PopoverContent className="w-full h-[200px] p-0">
           <Command>
             <CommandInput placeholder="Cari Matakuliah" />
             <CommandEmpty>Matakuliah tidak ditemukan</CommandEmpty>
-            <CommandGroup>
-              {data.map((matakuliah) => (
-                <CommandItem
-                  value={matakuliah.nama}
-                  key={matakuliah.kode}
-                  onSelect={() => {
-                    setOpen(false);
-                    onValueChange(matakuliah.kode);
-                  }}
-                >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      matakuliah.kode === value ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                  {matakuliah.nama}
-                </CommandItem>
-              ))}
-            </CommandGroup>
+            <ScrollArea>
+              <CommandGroup>
+                {data.map((matakuliah) => (
+                  <CommandItem
+                    value={matakuliah.nama}
+                    key={matakuliah.kode}
+                    onSelect={() => {
+                      setOpen(false);
+                      onValueChange(matakuliah.kode);
+                    }}
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        matakuliah.kode === value ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                    {matakuliah.nama}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </ScrollArea>
           </Command>
         </PopoverContent>
       </Popover>

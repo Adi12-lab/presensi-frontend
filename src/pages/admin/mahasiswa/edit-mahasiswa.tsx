@@ -97,7 +97,9 @@ function EditMahasiswa() {
 
   const akuns = useQuery<Akun[]>({
     queryKey: ["akun"],
-    queryFn: ServiceAkun.mahasiswa,
+    queryFn: async () => {
+      return await ServiceAkun.mahasiswa({ relation: 0 });
+    },
     staleTime: 1000 * 60 * 5,
   });
 
@@ -223,7 +225,7 @@ function EditMahasiswa() {
                     </FormControl>
                   </PopoverTrigger>
 
-                  <PopoverContent className="w-[200px] p-0">
+                  <PopoverContent className="w-[200px] h-[200px] p-0">
                     <Command>
                       <CommandInput placeholder="Cari Akun..." />
                       <CommandEmpty>Akun tidak ditemukan.</CommandEmpty>

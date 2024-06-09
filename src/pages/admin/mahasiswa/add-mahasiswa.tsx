@@ -46,6 +46,7 @@ import {
   CommandItem,
 } from "~/components/ui/command";
 import { useNavigate } from "react-router-dom";
+import { ScrollArea } from "~/components/ui/scroll-area";
 
 function AddMahasiswa() {
   const navigate = useNavigate();
@@ -75,7 +76,7 @@ function AddMahasiswa() {
   const akuns = useQuery<Akun[]>({
     queryKey: ["akun"],
     queryFn: async () => {
-      return await ServiceAkun.mahasiswa();
+      return await ServiceAkun.mahasiswa({ relation: -1 });
     },
     staleTime: 1000 * 60 * 5,
   });
@@ -202,31 +203,33 @@ function AddMahasiswa() {
                     </FormControl>
                   </PopoverTrigger>
 
-                  <PopoverContent className="w-[200px] p-0">
+                  <PopoverContent className="w-[200px] h-[200px] p-0">
                     <Command>
                       <CommandInput placeholder="Cari Akun..." />
                       <CommandEmpty>Akun tidak ditemukan.</CommandEmpty>
-                      <CommandGroup>
-                        {akuns.data?.map((akun) => (
-                          <CommandItem
-                            key={akun.username + "combobox"}
-                            value={akun.username}
-                            onSelect={() => {
-                              form.setValue("akunUsername", akun.username);
-                            }}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                akun.username === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
-                            {akun.username}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
+                      <ScrollArea className="h-full">
+                        <CommandGroup>
+                          {akuns.data?.map((akun) => (
+                            <CommandItem
+                              key={akun.username + "combobox"}
+                              value={akun.username}
+                              onSelect={() => {
+                                form.setValue("akunUsername", akun.username);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  akun.username === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {akun.username}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </ScrollArea>
                     </Command>
                   </PopoverContent>
                 </Popover>
